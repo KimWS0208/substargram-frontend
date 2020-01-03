@@ -18,6 +18,7 @@ const Header = styled.header`
     justify-content: center;
     align-items: center;
     padding: 25px 0px;
+    z-index: 2;
 
 `;
 
@@ -81,41 +82,38 @@ export default withRouter(({history}) => {
     }
     return (
         <Header>
-        <HeaderWrapper>
-            <HeaderColumn>
-                <Link to="/">
-                    <Logo />
-                </Link>
-            </HeaderColumn>
+            <HeaderWrapper>
+                <HeaderColumn>
+                    <Link to="/">
+                        <Logo />
+                    </Link>
+                </HeaderColumn>
 
-            <HeaderColumn>
-                <form onSubmit={onSearchSubmit}>
-                    <SearchInput {...search} placeholder="Search" />
-                </form>
-            </HeaderColumn>
+                <HeaderColumn>
+                    <form onSubmit={onSearchSubmit}>
+                        <SearchInput {...search} placeholder="Search" />
+                    </form>
+                </HeaderColumn>
 
-            <HeaderColumn>
-                <HeaderLink to="/explore">
-                    <Compass />
-                </HeaderLink>
-                <HeaderLink to="/notifications">
-                    <HeartEmpty />
-                </HeaderLink>
-                {/* <HeaderLink to="/username">
-                    <User />
-                </HeaderLink> */}
-                {!data.me ? (
-                    <HeaderLink to="/#">
-                        <User />
+                <HeaderColumn>
+                    <HeaderLink to="/explore">
+                        <Compass />
                     </HeaderLink>
-                ) : (
-                    <HeaderLink to={data.me.userName}>
-                       <User />
-                    </HeaderLink> 
-                )}
-            </HeaderColumn>
-                
-        </HeaderWrapper>
-    </Header>
+                    <HeaderLink to="/notifications">
+                        <HeartEmpty />
+                    </HeaderLink>
+                    {!data.me ? (
+                        <HeaderLink to="/#">
+                            <User />
+                        </HeaderLink>
+                    ) : (
+                        <HeaderLink to={data.me.userName}>
+                            <User />
+                        </HeaderLink> 
+                    )}
+                </HeaderColumn>
+                    
+            </HeaderWrapper>
+        </Header>
     )
 })

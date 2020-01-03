@@ -3,16 +3,19 @@ import styled, {keyframes} from "styled-components";
 import {Logo} from "./Icons";
 
 const Animation = keyframes`
-    from {
+    0% {
         opacity:0
     }
-    to {
-        opacity:2
+    50% {
+        opacity:1
+    }
+    100% {
+        opacity:0
     }
 `;
 
 const Loader = styled.div`
-    animation: ${Animation} 1s linear infinite;
+    animation: ${Animation} 1s linear infinite;    
 `;
 
 export default () => (
