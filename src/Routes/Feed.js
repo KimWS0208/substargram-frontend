@@ -21,8 +21,8 @@ const FEED_QUERY = gql`
                 id
                 url
             }
-            isLiked
             likeCount
+            isLiked
             comments{
                 id
                 text
@@ -50,12 +50,12 @@ export default () => {
         <Wrapper>
             {loading && <Loader />}
             <Helmet><title>Feed | Substargram</title></Helmet> 
-            {loading && <Loader />}
             {!loading &&
              data &&
              data.seeFeed &&
              data.seeFeed.map(post => (
                  <Post
+                    key={post.id}
                     id= {post.id}
                     location={post.location}
                     caption={post.caption}
@@ -65,7 +65,6 @@ export default () => {
                     isLiked={post.isLiked}
                     comments={post.comments}
                     createdAt={post.createdAt}
-                    
                 />))}
         </Wrapper>
     )

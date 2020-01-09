@@ -4,12 +4,15 @@ import {Link, withRouter} from "react-router-dom";
 import useInput from "../Hooks/useInput";
 import Input from "./Input";
 import { Compass, HeartEmpty, User, Logo } from "./Icons";
-import {gql} from "apollo-boost";
 import { useQuery } from "react-apollo-hooks";
+import { ME } from "../SharedQueries";
 
 const Header = styled.header`
     width: 100%;
     border: 0;
+    position: flex;
+    top: 0;
+    left: 0;
     background-color: white;
     border-bottom: ${props => props.theme.boxBorder};
     border-radius: 0;
@@ -62,13 +65,7 @@ const HeaderLink = styled(Link)`
     }
 `;
 
-const ME = gql`
-    {
-        me{
-            userName
-        }
-    }    
-`;
+
 
 export default withRouter(({history}) => {
     // console.log(props)
@@ -91,7 +88,7 @@ export default withRouter(({history}) => {
 
                 <HeaderColumn>
                     <form onSubmit={onSearchSubmit}>
-                        <SearchInput {...search} placeholder="Search" />
+                        <SearchInput value={search.value} onChange={search.onChange} placeholder="Search" />
                     </form>
                 </HeaderColumn>
 

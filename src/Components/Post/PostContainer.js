@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import useInput from "../../Hooks/useInput";
 import PostPresenter from "./PostPresenter";
@@ -6,30 +6,43 @@ import { useMutation } from "react-apollo-hooks";
 import { TOGGLE_LIKE, ADD_COMMENT } from "./PostQueries";
 import { toast } from "react-toastify";
 
-const PostContainer = ({id, user, files, likeCount, isLiked, comments, createdAt, caption, location}) => {
+
+const PostContainer = ({
+    id,
+    user,
+    files,
+    likeCount,
+    isLiked,
+    comments,
+    createdAt,
+    caption,
+    location
+}) => {
     const [isLikedS, setisLiked] = useState(isLiked)
     const [likeCountS, setlikeCount] = useState(likeCount)
     const [currentItem, setcurrentItem] = useState(0);
+    const [selfComments, setSelfComments] = useState([]);
     const comment = useInput("");
-    const toggleLikeMutation = useMutation(TOGGLE_LIKE, {
-        variables: {postId: id}
+    const [toggleLikeMutation] = useMutation(TOGGLE_LIKE, {
+        variables: { postId: id }
     });
-    const addCommentMutation = useMutation(ADD_COMMENT, {
+    const [addCommentMutation] = useMutation(ADD_COMMENT, {
         variables: {postId: id, text: comment.value}
     })
     const slide = () => {
         const totalFiles = files.length;
-        if(currentItem === totalFiles - 1 ){
-            setTimeout( () => setcurrentItem(0), 2000);
+        if (currentItem === totalFiles - 1) {
+        setTimeout(() => setcurrentItem(0), 3000);
         } else {
-            setTimeout( () => setcurrentItem(currentItem + 1), 2000);
+        setTimeout(() => setcurrentItem(currentItem + 1), 3000);
         }
     };
     useEffect(() => {
         slide();
     }, [currentItem]);
     
-    const toggleLike = async() => {
+    const toggleLike =() => {
+        toggleLikeMutation([]);
         if(isLikedS === true){
             setisLiked(false)
             setlikeCount(likeCountS -1)
@@ -37,12 +50,25 @@ const PostContainer = ({id, user, files, likeCount, isLiked, comments, createdAt
             setisLiked(true)
             setlikeCount(likeCountS +1)
         }
-        try {
-            await toggleLikeMutation()
-        } catch {
-            toast.error("Can't register like")
+    }
+
+    const onKeyPress = async event => {
+        const{which} = event;
+        if(which === 13){
+            event.preventDefault();
+            try{
+                // console.log("zxczxc")
+                const { data:{addComment} } = await addCommentMutation();
+                // console.log("qweqwe")
+                setSelfComments([...selfComments, addComment])
+                comment.setValue("");
+                // console.log("sdfsdgsd")
+            } catch{
+                toast.error("Cant send comment")
+            }
         }
     }
+
     
     return (
         <PostPresenter
@@ -59,6 +85,8 @@ const PostContainer = ({id, user, files, likeCount, isLiked, comments, createdAt
             setlikeCount={setlikeCount}
             currentItem={currentItem}
             toggleLike={toggleLike}
+            onKeyPress={onKeyPress}
+            selfComments={selfComments}
         />
     )
 }
@@ -86,9 +114,7 @@ PostContainer.propTypes = {
     })).isRequired,
     caption: PropTypes.string.isRequired,
     location: PropTypes.string,
-    createdAt: PropTypes.string.isRequired,
-    
-
+    createdAt: PropTypes.string.isRequired
 }
 
 export default PostContainer;

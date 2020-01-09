@@ -1,9 +1,10 @@
 import React from "react";
 import styled from "styled-components";
 import Avatar from "../Avatar";
-import { HeartEmpty, Comment, HeartFull } from "../Icons";
+import { HeartEmpty, HeartFull, Comment as CommentIcon, } from "../Icons";
 import FatText from "../FatText";
 import TextareaAutosize from "react-autosize-textarea";
+import { Link } from "react-router-dom";
 
 
 const Post = styled.div`
@@ -12,13 +13,16 @@ const Post = styled.div`
     max-width: 600px;
     user-select: none;
     margin-bottom: 25px;
+    a {
+        color: inherit;
+    }
 
 `;
 
 const Header = styled.header`
     padding: 15px;
     display: flex;
-    aligns-items: center;
+    align-items: center;
 `;
 
 const UserColumn = styled.div`
@@ -72,7 +76,7 @@ const Buttons = styled.div`
 
 const Timestamp = styled.span`
     font-weight: 400;
-    text-tarnsform: uppercase;
+    text-transform: uppercase;
     opacity: 0.5;
     display: block;
     font-size: 12px;
@@ -90,13 +94,43 @@ const Textarea = styled(TextareaAutosize)`
         outline: none;
     }
 `;
+const Comments = styled.ul`
+    margin-top: 10px;
+`;
 
-export default ({user:{userName, avatar}, location, files, isLiked, likeCount, createdAt, newComment, currentItem, toggleLike}) => (
+const Comment = styled.li`
+    margin-bottom: 7px;
+    span {
+        margin-right: 5px;
+      }
+`;
+
+// const Caption = styled.div`
+//     margin: 10px 0px;
+// `;
+
+
+
+export default ({user:{userName, avatar},
+    location,
+    files,
+    isLiked,
+    likeCount,
+    createdAt,
+    newComment,
+    currentItem,
+    toggleLike,
+    onKeyPress,
+    comments,
+    selfComments,
+}) => (
     <Post>
         <Header>
             <Avatar size = "sm" url={avatar} />
             <UserColumn>
-                <FatText text={userName} />
+                <Link to={`/${userName}`}>
+                    <FatText text={userName} />
+                </Link>
                 <Location>{location}</Location>
             </UserColumn>
         </Header>
@@ -104,18 +138,37 @@ export default ({user:{userName, avatar}, location, files, isLiked, likeCount, c
             {files && files.map((file, index) => <File key={file.id} src={file.url} showing={index === currentItem} />)}
         </Files>
         <Meta>
+            <Buttons>
+                <Button onClick={toggleLike}>
+                    {isLiked ? <HeartFull /> : <HeartEmpty />}
+                </Button>
+                <Button>
+                    <CommentIcon />
+                </Button>
+            </Buttons>
+            <FatText text={likeCount === 1 ? "1 likes" : `${likeCount} likes` } />
+            {/* <Caption>
+                <FatText text={userName} /> {caption}
+            </Caption> */}
+            {comments && (
+                <Comments>
+                    {comments.map(comment => (
+                        <Comment key={comment.id}>
+                            <FatText text={comment.user.userName} />
+                            {comment.text}
+                        </Comment>
+                    ))}
+                    {selfComments.map(comment => (
+                        <Comment key={comment.id}>
+                            <FatText text={comment.user.userName} />
+                            {comment.text}
+                        </Comment>
+                    ))}
+                </Comments>
+            )}
+            <Timestamp>{createdAt}</Timestamp>
+            <Textarea placeholder={"Add a comments..."} value={newComment.value} onChange={newComment.onChange} onKeyUp={onKeyPress}/>
         </Meta>
-        <Buttons>
-            <Button onClick={toggleLike}>
-                {isLiked ? <HeartFull /> : <HeartEmpty />}
-            </Button>
-            <Button>
-                <Comment />
-            </Button>
-        </Buttons>
-        <FatText text={likeCount === 1 ? "1 like" : `${likeCount} likes` } />
-        <Timestamp>{createdAt}</Timestamp>
-        <Textarea placeholder={"Add a comments..."} {...newComment}/>
     </Post>
 )
 
