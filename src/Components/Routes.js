@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import Feed from "../Routes/Feed";
 import Auth from "../Routes/Auth";
 import Explore from "../Routes/Explore";
-import Profile from "../Routes/Profile";
+import Profile from "../Routes/Profile/ProfileContainer";
 import Search from "../Routes/Search";
 
 const LoggedInRoutes = () => (
@@ -12,7 +12,7 @@ const LoggedInRoutes = () => (
         <Route exact path="/" component={Feed} />
         <Route path="/explore" component={Explore} />
         <Route path="/search" component={Search} />
-        <Route path="/:username" component={Profile} />
+        <Route path="/:userName" component={Profile} />
     </Switch>
 )
 
