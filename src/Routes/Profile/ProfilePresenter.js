@@ -6,6 +6,9 @@ import Avatar from "../../Components/Avatar";
 import FatText from "../../Components/FatText";
 import FollowButton from '../../Components/FollowButton';
 import SquarePost from '../../Components/SquarePost';
+import Button from '../../Components/Button';
+// import FollowButtonContainer from '../../Components/FollowButton';
+
 
 
 const Wrapper = styled.div`
@@ -63,7 +66,7 @@ const Posts = styled.div`
 `;
 
 
-export default ({loading, data}) => {
+export default ({loading, data, logOut}) => {
     if(loading === true){
         return (
             <Wrapper>
@@ -88,19 +91,20 @@ export default ({loading, data}) => {
         } = data;
         return (
             <Wrapper>
-            <Helmet>
-                <title>
-                    {userName} | Sumstargram
-                </title>
-            </Helmet>
+                <Helmet>
+                    <title>
+                        {userName} | Sumstargram
+                    </title>
+                </Helmet>
                 <Header>
                     <HeaderColumn>
                         <Avatar size="lg" url={avatar} />
                     </HeaderColumn>
                     <HeaderColumn>
                         <UsernameRow>
-                        <Username>{userName}</Username>
-                            {!itSelf && <FollowButton id={id} isFollowing={isFollowing} />}
+                            <Username>{userName}</Username>{"  "}
+                            {itSelf ? <Button onClick={()=>console.log(logOut),logOut} text="Log Out" /> : <FollowButton id={id} isFollowing={isFollowing} />}
+                            {/* {itSelf ? <Button onClick={()=>console.log(logOut)} text="Log Out" /> : <FollowButton id={id} isFollowing={isFollowing} />} */}
                         </UsernameRow>
                         <Counts>
                             <Count>
@@ -120,7 +124,8 @@ export default ({loading, data}) => {
                 <Posts>
                     {post &&
                         post.map(post =>
-                            <SquarePost 
+                            <SquarePost
+                                key={post.id} 
                                 likeCount={post.likeCount}
                                 commentCount={post.commentCount}
                                 file={post.files[0]} />

@@ -7,8 +7,8 @@ const Container = styled.button`
     border: 0;
     border-radius: ${props => props.theme.borderRadius};
     color: white;
-    font-weight:600;
-    background-color:${props => props.theme.blueColor};
+    font-weight: 600;
+    background-color: ${props => props.theme.blueColor};
     text-align: center;
     padding: 7px 0px;
     font-size: 14px;
@@ -17,10 +17,12 @@ const Container = styled.button`
 
 
 
-const Button = ({text, onClick}) => 
+const Button = ({text, onClick}) => (
     <Container onClick={onClick}>
         {text}
     </Container>
+)
+
 
 Button.propTypes = {
     text: PropTypes.string.isRequired
